@@ -1,0 +1,14 @@
+
+Changelog - Local SSO Login Plugin
+
+Versão 1.0 - 2025-04-14
+- Versão inicial do plugin.
+- Implementada a autenticação via SSO utilizando token HMAC.
+- Validação de tempo de expiração do token.
+- Verificação de usuário existente com username e email no Moodle.
+- Redirecionamento para a página do curso ou para a área "Meus Cursos" após login.
+- Geração e configuração da chave secreta diretamente no Moodle (disponível na interface de administração).
+
+Observações:
+- A chave secreta deve ser configurada em: Administração do site > Plugins locais > Local SSO Login.
+- O acesso via HTTPS é obrigatório, conforme validado no script.
