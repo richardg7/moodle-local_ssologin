@@ -1,8 +1,9 @@
 <?php
+// SPDX-License-Identifier: GPL-3.0-or-later
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_sso_login';
-$plugin->version   = 2025041301;
-$plugin->requires  = 2020061500;
+$plugin->component = 'local_ssologin';
+$plugin->version   = 2025042000;
+$plugin->requires  = 2024040800; // Moodle 5.x
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.1';
+$plugin->release   = 'v1.0';

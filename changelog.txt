@@ -1,14 +1,32 @@
+# 📄 CHANGELOG
 
-Changelog - Local SSO Login Plugin
+Todas as alterações notáveis deste projeto serão documentadas neste arquivo.
 
-Versão 1.0 - 2025-04-14
-- Versão inicial do plugin.
-- Implementada a autenticação via SSO utilizando token HMAC.
-- Validação de tempo de expiração do token.
-- Verificação de usuário existente com username e email no Moodle.
-- Redirecionamento para a página do curso ou para a área "Meus Cursos" após login.
-- Geração e configuração da chave secreta diretamente no Moodle (disponível na interface de administração).
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)  
+Este projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-Observações:
-- A chave secreta deve ser configurada em: Administração do site > Plugins locais > Local SSO Login.
-- O acesso via HTTPS é obrigatório, conforme validado no script.
+---
+
+## [1.0.0] – 2025-04-20
+
+### 🚀 Lançamento inicial
+
+- 🔒 Implementação completa do plugin de login SSO para Moodle
+- 🔑 Suporte a autenticação via chave secreta compartilhada (HMAC)
+- 🔐 Criptografia AES-256-CBC com IV aleatório e codificação Base64
+- ⏱️ Validação de timestamp com tolerância configurável
+- ✅ Validação de assinatura HMAC-SHA256
+- 📥 Suporte a autenticação automática baseada em parâmetros GET
+- 🧾 Geração de logs de autenticação (sucesso/falha)
+- ⚙️ Tela de configuração no painel administrativo do Moodle
+- 📚 Exemplos de integração externa em PHP, Python e Java
+
+---
+
+## [Próxima versão] – em desenvolvimento
+
+---
+
+## 📌 Histórico
+
+Este é o primeiro changelog formal. Mudanças anteriores podem não estar documentadas.

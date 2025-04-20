@@ -1,15 +1,22 @@
 <?php
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_sso_login', get_string('pluginname', 'local_sso_login'));
+$settings = new admin_settingpage('local_ssologin', get_string('pluginname', 'local_ssologin'));
 
-    $settings->add(new admin_setting_configtext(
-        'local_sso_login/secret',
-        get_string('secret', 'local_sso_login'),
-        get_string('secret_desc', 'local_sso_login'),
-        bin2hex(random_bytes(16)) // Gera um valor padrão seguro
-    ));
+$settings->add(new admin_setting_configtext(
+    'local_ssologin/secretkey',
+    get_string('secretkey', 'local_ssologin'),
+    get_string('secretkey_desc', 'local_ssologin'),
+    bin2hex(random_bytes(16)), // Gera um valor padrão seguro
+    PARAM_ALPHANUMEXT
+));
 
-    $ADMIN->add('localplugins', $settings);
-}
+$settings->add(new admin_setting_configtext(
+    'local_ssologin/tokenexpire',
+    get_string('tokenexpire', 'local_ssologin'),
+    get_string('tokenexpire_desc', 'local_ssologin'),
+    300,
+    PARAM_INT
+));
+
+$ADMIN->add('localplugins', $settings);
