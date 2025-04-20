@@ -1,7 +1,7 @@
 # .gitignore para projetos NetBeans e Java 
 
 # Arquivos específicos do NetBeans
- /nbproject/private/ 
+/nbproject/private/ 
 /build/ 
 /nbbuild/ 
 /dist/ 
