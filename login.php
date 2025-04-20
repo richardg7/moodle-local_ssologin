@@ -35,11 +35,11 @@ $data = local_ssologin_decrypt($encdata, $secret);
 $payload = json_decode($data, true);
 
 if (!local_ssologin_verify_token($data, $signature, $secret)) {
-    print_error('invalidtoken', 'local_ssologin');
+    throw new moodle_exception('invalidtoken', 'local_ssologin');
 }
 
 if (time() - $payload['timestamp'] > $tokenexpire) {
-    print_error('invalidtoken', 'local_ssologin');
+    throw new moodle_exception('invalidtoken', 'local_ssologin');
 }
 
 $username = $payload['username'];
@@ -50,5 +50,5 @@ if ($user = $DB->get_record('user', ['username' => $username, 'deleted' => 0])) 
     redirect(new moodle_url('/'));
 } else {
     local_ssologin_log_attempt('fail', 0, $username);
-    print_error('loginfailure', 'local_ssologin', '', $username);
+    throw new moodle_exception('loginfailure', 'local_ssologin', '', $username);
 }
