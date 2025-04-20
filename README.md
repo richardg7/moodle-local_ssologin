@@ -1,68 +1,66 @@
+# 🔐 SSO Login - External Authentication Plugin for Moodle
 
-# 🔐 SSO Login - Plugin de Autenticação Externa para Moodle
-
-Este plugin permite autenticação única (SSO) no Moodle a partir de um sistema externo, utilizando criptografia AES-256-CBC e assinatura HMAC-SHA256 para garantir segurança e integridade dos dados.
-
----
-
-## 🚀 Instalação
-
-1. Acesse o Moodle como **administrador**
-2. Vá até **Administração do site > Notificações**
-3. O Moodle detectará o plugin e pedirá para atualizar a base de dados
+This plugin allows single sign-on (SSO) authentication in Moodle from an external system, using AES-256-CBC encryption and HMAC-SHA256 signature to ensure data security and integrity.
 
 ---
 
-## ⚙️ Configuração
+## 🚀 Installation
 
-Após instalado, acesse:
-
-**Administração do site > Plugins > Plugins locais > SSO Login**
-
-Configure os seguintes parâmetros:
-
-- 🔑 **Chave Secreta Compartilhada (HMAC)**
-- ⏱️ **Tempo máximo permitido para timestamp** (ex: `300` segundos)
-- ✅ **Habilitar logs de autenticação**
+1. Access Moodle as **administrator**
+2. Go to **Site Administration > Notifications**
+3. Moodle will detect the plugin and ask to update the database
 
 ---
 
-## 🔗 Integração com Sistema Externo
+## ⚙️ Configuration
 
-### ✅ Parâmetros esperados:
+After installing, access:
 
-| Parâmetro | Descrição |
-|----------|-----------|
-| `data`   | JSON criptografado com AES-256-CBC + codificado em Base64 |
-| `sig`    | Assinatura `hash_hmac` SHA256 do payload JSON (antes da criptografia) |
+**Site Administration > Plugins > Local Plugins > SSO Login**
 
-### 📋 O Plugin:
+Configure the following parameters:
 
-1. **Descriptografa** os dados recebidos via `data`
-2. **Valida** a assinatura `sig` com HMAC
-3. **Verifica** o tempo de envio (timestamp)
-4. **Autentica** o usuário automaticamente no Moodle
-5. **Gera logs** de sucesso ou falha (se habilitado)
+- 🔑 **Shared Secret Key (HMAC)**
+- ⏱️ **Maximum time allowed for timestamp** (e.g. `300` seconds)
+- ✅ **Enable authentication logs**
 
 ---
 
-## 💻 Exemplo de Código para Integração
+## 🔗 Integration with External System
 
-### 🔹 PHP
+### ✅ Expected parameters:
+
+| Parameter | Description |
+|----------|----------|
+| `data` | JSON encrypted with AES-256-CBC + encoded in Base64 |
+| `sig` | SHA256 `hash_hmac` signature of the JSON payload (before encryption) |
+
+### 📋 The Plugin:
+
+1. **Decrypts** the data received via `data`
+2. **Validates** the `sig` signature with HMAC
+3. **Checks** the sending time (timestamp)
+4. **Automatically authenticates** the user in Moodle
+5. **Generates success or failure logs** (if enabled)
+
+---
+
+## 💻 Sample Code for Integration
+
+### PHP
 ```php
 function redirect_to_moodle_sso($username, $shared_secret, $moodle_login_url) {
-    $timestamp = time();
-    $payload = json_encode(['username' => $username, 'timestamp' => $timestamp]);
+$timestamp = time(); $payload = json_encode(['username' => $username, 'timestamp' => $timestamp]);
 
-    $iv = openssl_random_pseudo_bytes(16);
-    $ciphertext = openssl_encrypt($payload, 'aes-256-cbc', $shared_secret, 0, $iv);
-    $encrypted = base64_encode($ciphertext . '::' . $iv);
+ $iv = openssl_random_pseudo_bytes(16);
+ $ciphertext = openssl_encrypt($payload, 'aes-256-cbc', $shared_secret, 0, $iv);
+ $encrypted = base64_encode($ciphertext . '::' . $iv);
 
-    $sig = hash_hmac('sha256', $payload, $shared_secret);
+ $sig = hash_hmac('sha256', $payload, $shared_secret);
 
-    $url = $moodle_login_url . '?data=' . urlencode($encrypted) . '&sig=' . $sig;
-    header("Location: $url");
-    exit;
+ $url = $moodle_login_url . '?data=' . urlencode($encrypted) . '&sig=' . $sig;
+ header("Location: $url");
+ exit;
 }
 
 require_once 'config.php'; // define MOODLE_SSO
@@ -71,16 +69,15 @@ $moodle_url = 'https://localhost/moodle/local/ssologin/login.php';
 $shared_secret = MOODLE_SSO;
 
 redirect_to_moodle_sso($username, $shared_secret, $moodle_url);
-```
 
-### 🔹 Python
+### Python
 ```python
 import time, json, base64, hmac, hashlib
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 import urllib.parse, webbrowser
 
-secret = b'CHAVE_SECRETA'.ljust(32, b'\0')
+secret = b'SECRET_KEY'.ljust(32, b'\0')
 username = 'jose'
 timestamp = int(time.time())
 
@@ -94,51 +91,44 @@ encrypted = base64.b64encode(cipher.encrypt(payload) + b'::' + iv).decode()
 
 sig = hmac.new(secret, payload[:-padding], hashlib.sha256).hexdigest()
 
-url = 'https://seudominio.com/local/ssologin/login.php?data={}&sig={}'.format(
-    urllib.parse.quote(encrypted), sig
+url = 'https://yourdomain.com/local/ssologin/login.php?data={}&sig={}'.format(
+ urllib.parse.quote(encrypted), sig
 )
 
 webbrowser.open(url)
-```
 
-### 🔹 Java
+### JAVA
 ```java
-String secret = "CHAVE_SECRETA";
+String secret = "SECRET_KEY";
 String username = "jose";
 long timestamp = System.currentTimeMillis() / 1000;
 
-String json = "{"username":"" + username + "","timestamp":" + timestamp + "}";
+String json = "{\"username\":\"" + username + "\",\"timestamp\":" + timestamp + "}";
 
-// 🔐 Encrypt JSON com AES/CBC/PKCS5Padding
-// 🔐 Assinatura HMAC-SHA256
-// 🔗 Base64 encode + redirect para Moodle
+// 🔐 Encrypt JSON with AES/CBC/PKCS5Padding
+// 🔐 HMAC-SHA256 signature
+// 🔗 Base64 encode + redirect to Moodle
 
-// ⚠️ A implementação depende da sua stack Java (ex: BouncyCastle, Apache Commons Crypto)
-```
+// ⚠️ The implementation depends on your Java stack (e.g. BouncyCastle, Apache Commons Crypto)
 
----
+###🔒 Security Considerations
+Always use HTTPS
 
-### 🔒 Considerações de Segurança
+Store the secret key securely
 
-- Utilize sempre **HTTPS**
-- Armazene a chave secreta com segurança
-- Revise periodicamente os logs de autenticação
-- Limite o tempo de validade do token (recomendado ≤ 300s)
-- Atualize regularmente o plugin
+Periodically review the authentication logs
 
----
+Limit the token expiration time (recommended ≤ 300s)
 
-### 📜 Licença
+Regularly update the plugin
 
-GNU GPLv3 - Arquivo LICENSE
+###License
+GNU GPLv3 - LICENSE file
 
-Aviso: Recomenda-se auditoria de segurança antes de usar em produção
+Warning: Security audit is recommended before using in production
 
----
+###👨‍💻 Author
+Developed by Richard Guedes - Cyber ​​Defense Institute (IDCiber) – idciber.org
+Contact: contato@idciber.org
 
-### 👨‍💻 Autor
-
-Desenvolvido por Richard Guedes - Instituto de Defesa Cibernética (IDCiber) – [idciber.org](https://idciber.org)  
-Contato: contato@idciber.org
-
-[SSO Login](https://github.com/richardg7/sso_login) by [Richard Guedes](https://www.linkedin.com/in/richard-guedes/) is licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1)
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/richardg7/sso_login">SSO Login</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.linkedin.com/in/richard-guedes/">Richard Guedes</a> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
