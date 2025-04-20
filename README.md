@@ -32,7 +32,7 @@ Configure the following parameters:
 
 | Parameter | Description |
 |----------|----------|
-| `data` | JSON encrypted with AES-256-CBC + encoded in Base64 |
+| `data` | JSON encrypted with AES-256-CBC + Base64 encoded |
 | `sig` | SHA256 `hash_hmac` signature of the JSON payload (before encryption) |
 
 ### 📋 The Plugin:
@@ -47,7 +47,7 @@ Configure the following parameters:
 
 ## 💻 Sample Code for Integration
 
-### PHP
+### 🔹 PHP
 ```php
 function redirect_to_moodle_sso($username, $shared_secret, $moodle_login_url) {
 $timestamp = time(); $payload = json_encode(['username' => $username, 'timestamp' => $timestamp]);
@@ -69,8 +69,9 @@ $moodle_url = 'https://localhost/moodle/local/ssologin/login.php';
 $shared_secret = MOODLE_SSO;
 
 redirect_to_moodle_sso($username, $shared_secret, $moodle_url);
+```
 
-### Python
+### 🔹 Python
 ```python
 import time, json, base64, hmac, hashlib
 from Crypto.Cipher import AES
@@ -96,39 +97,47 @@ url = 'https://yourdomain.com/local/ssologin/login.php?data={}&sig={}'.format(
 )
 
 webbrowser.open(url)
+```
 
-### JAVA
+### 🔹 Java
 ```java
 String secret = "SECRET_KEY";
 String username = "jose";
 long timestamp = System.currentTimeMillis() / 1000;
 
-String json = "{\"username\":\"" + username + "\",\"timestamp\":" + timestamp + "}";
+String json = "{"username":"" + username + "","timestamp":" + timestamp + "}";
 
 // 🔐 Encrypt JSON with AES/CBC/PKCS5Padding
 // 🔐 HMAC-SHA256 signature
 // 🔗 Base64 encode + redirect to Moodle
 
 // ⚠️ The implementation depends on your Java stack (e.g. BouncyCastle, Apache Commons Crypto)
+```
 
-###🔒 Security Considerations
-Always use HTTPS
+---
 
-Store the secret key securely
+### 🔒 Security Considerations
 
-Periodically review the authentication logs
+- Always use **HTTPS**
+- Store the secret key securely
+- Periodically review the authentication logs
+- Limit the token expiration time (recommended ≤ 300s)
+- Update the plugin regularly
 
-Limit the token expiration time (recommended ≤ 300s)
+---
 
-Regularly update the plugin
+### 📜 License
 
-###License
 GNU GPLv3 - LICENSE file
 
 Warning: Security audit is recommended before using in production
 
-###👨‍💻 Author
-Developed by Richard Guedes - Cyber ​​Defense Institute (IDCiber) – idciber.org
+---
+
+### 👨‍💻 Author
+
+Developed by Richard Guedes - Cyber ​​Defense Institute (IDCiber) – [idciber.org](https://idciber.org)
+
 Contact: contato@idciber.org
 
-<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/richardg7/sso_login">SSO Login</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://www.linkedin.com/in/richard-guedes/">Richard Guedes</a> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-ShareAlike 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+[SSO Login](https://github.com/richardg7/sso_login) by [Richard Guedes](https://www.linkedin.com/in/richard-guedes/) is licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1)
