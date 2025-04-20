@@ -1,32 +1,33 @@
 # 📄 CHANGELOG
 
-Todas as alterações notáveis deste projeto serão documentadas neste arquivo.
+All notable changes to this project will be documented in this file.
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)  
-Este projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en-US/1.0.0/)
+
+This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
 ## [1.0.0] – 2025-04-20
 
-### 🚀 Lançamento inicial
+### 🚀 Initial release
 
-- 🔒 Implementação completa do plugin de login SSO para Moodle
-- 🔑 Suporte a autenticação via chave secreta compartilhada (HMAC)
-- 🔐 Criptografia AES-256-CBC com IV aleatório e codificação Base64
-- ⏱️ Validação de timestamp com tolerância configurável
-- ✅ Validação de assinatura HMAC-SHA256
-- 📥 Suporte a autenticação automática baseada em parâmetros GET
-- 🧾 Geração de logs de autenticação (sucesso/falha)
-- ⚙️ Tela de configuração no painel administrativo do Moodle
-- 📚 Exemplos de integração externa em PHP, Python e Java
-
----
-
-## [Próxima versão] – em desenvolvimento
+- 🔒 Full implementation of the SSO login plugin for Moodle
+- 🔑 Support for authentication via shared secret key (HMAC)
+- 🔐 AES-256-CBC encryption with random IV and Base64 encoding
+- ⏱️ Timestamp validation with configurable tolerance
+- ✅ HMAC-SHA256 signature validation
+- 📥 Support for automatic authentication based on GET parameters
+- 🧾 Authentication log generation (success/failure)
+- ⚙️ Configuration screen in the Moodle admin panel
+- 📚 Examples of external integration in PHP, Python and Java
 
 ---
 
-## 📌 Histórico
+## [Next version] – in development
 
-Este é o primeiro changelog formal. Mudanças anteriores podem não estar documentadas.
+---
+
+## 📌 History
+
+This is the first formal changelog. Previous changes may not be documented.
