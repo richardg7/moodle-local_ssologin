@@ -18,7 +18,7 @@
  * Plugin settings
  *
  * @package    local_ssologin
- * @copyright  2025 Richard Guedes <richard@example.com>
+ * @copyright  2025 Richard Guedes  - Instituto de Defesa Cibernética (IDCiber)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_ssologin\event;
