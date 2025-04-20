@@ -71,6 +71,8 @@ $shared_secret = MOODLE_SSO;
 
 redirect_to_moodle_sso($username, $shared_secret, $moodle_url);
 
+---
+
 ### Python
 ```python
 import time, json, base64, hmac, hashlib
@@ -97,6 +99,8 @@ url = 'https://seudominio.com/local/ssologin/login.php?data={}&sig={}'.format(
 )
 
 webbrowser.open(url)
+
+---
 
 ### JAVA
 ```java
@@ -128,6 +132,7 @@ GNU GPLv3 - Arquivo LICENSE
 
 Aviso: Recomenda-se auditoria de segurança antes de usar em produção
 
+---
 
 ###👨‍💻 Autor
 Desenvolvido por Richard Guedes - Instituto de Defesa Cibernética (IDCiber) – idciber.org
