@@ -29,7 +29,7 @@ $settings->add(new admin_setting_configtext(
     'local_ssologin/secretkey',
     get_string('secretkey', 'local_ssologin'),
     get_string('secretkey_desc', 'local_ssologin'),
-    bin2hex(random_bytes(16)), // Gera um valor padrão seguro
+    bin2hex(random_bytes(16)), // Generates a secure default value.
     PARAM_ALPHANUMEXT
 ));
 

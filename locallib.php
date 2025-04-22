@@ -66,7 +66,7 @@ function local_ssologin_log_attempt($status, $userid, $username = '') {
         'context' => \context_system::instance(),
         'other' => [
             'username' => $username,
-            'status' => 'success', // Or 'fail'.
+            'status' => $status === 'success' ? 'success' : 'fail', // Clarified comment.
         ],
         'userid' => $userid,
     ])->trigger();

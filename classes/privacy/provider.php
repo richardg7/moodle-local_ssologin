@@ -15,19 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin settings
+ * Privacy provider implementation for the local_ssologin plugin.
  *
  * @package    local_ssologin
  * @copyright  2025 Richard Guedes  - Instituto de Defesa Cibernética (IDCiber)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace local_ssologin\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
 use core_privacy\local\metadata\null_provider;
 
+/**
+ * Privacy provider for local_ssologin.
+ *
+ * This plugin does not store any personal user data.
+ *
+ * @package    local_ssologin
+ */
 class provider implements null_provider {
+    /**
+     * Returns the reason why this plugin does not store any data.
+     *
+     * @return string The reason string.
+     */
     public static function get_reason(): string {
         return get_string('privacy:metadata', 'local_ssologin');
     }

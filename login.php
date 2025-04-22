@@ -15,15 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin settings
+ * Handles SSO login requests.
  *
  * @package    local_ssologin
  * @copyright  2025 Richard Guedes  - Instituto de Defesa Cibernética (IDCiber)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require('../../config.php');
 require_once($CFG->libdir . '/authlib.php');
 require_once(__DIR__.'/locallib.php');
+
+// Ensure the user is logged in or has appropriate permissions.
+require_login();
 
 $secret = get_config('local_ssologin', 'secretkey');
 $tokenexpire = get_config('local_ssologin', 'tokenexpire');
