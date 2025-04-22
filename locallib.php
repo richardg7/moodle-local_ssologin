@@ -23,28 +23,51 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Verifies the HMAC token.
+ *
+ * @param string $data The data to verify.
+ * @param string $signature The HMAC signature.
+ * @param string $secret The secret key.
+ * @return bool True if the token is valid, false otherwise.
+ */
 function local_ssologin_verify_token($data, $signature, $secret) {
     return hash_equals(hash_hmac('sha256', $data, $secret), $signature);
 }
 
+/**
+ * Decrypts the given encrypted string.
+ *
+ * @param string $encrypted The encrypted string.
+ * @param string $secret The secret key.
+ * @return string|false The decrypted string or false on failure.
+ */
 function local_ssologin_decrypt($encrypted, $secret) {
     list($ciphertext, $iv) = explode('::', base64_decode($encrypted), 2);
     return openssl_decrypt($ciphertext, 'aes-256-cbc', $secret, 0, $iv);
 }
 
+/**
+ * Logs an SSO login attempt.
+ *
+ * @param string $status The status of the attempt ('success' or 'fail').
+ * @param int $userid The user ID.
+ * @param string $username The username (optional).
+ * @return void
+ */
 function local_ssologin_log_attempt($status, $userid, $username = '') {
     $eventdata = [
         'component' => 'local_ssologin',
         'eventname' => 'SSO login attempt',
         'userid' => $userid,
-        'other' => ['username' => $username, 'status' => $status]
+        'other' => ['username' => $username, 'status' => $status],
     ];
     \local_ssologin\event\sso_login_attempted::create([
         'context' => \context_system::instance(),
         'other' => [
             'username' => $username,
-            'status' => 'success' // ou 'fail'
+            'status' => 'success', // Or 'fail'.
         ],
-        'userid' => $user ? $user->id : null
+        'userid' => $userid,
     ])->trigger();
 }
