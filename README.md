@@ -50,25 +50,38 @@ Configure the following parameters:
 ### 🔹 PHP
 ```php
 function redirect_to_moodle_sso($username, $shared_secret, $moodle_login_url) {
-$timestamp = time(); $payload = json_encode(['username' => $username, 'timestamp' => $timestamp]);
+    // Generate current timestamp
+    $timestamp = time();
 
- $iv = openssl_random_pseudo_bytes(16);
- $ciphertext = openssl_encrypt($payload, 'aes-256-cbc', $shared_secret, 0, $iv);
- $encrypted = base64_encode($ciphertext . '::' . $iv);
+    // Create payload with user data
+    $payload = json_encode([
+        'username' => $username,
+        'timestamp' => $timestamp
+    ]);
 
- $sig = hash_hmac('sha256', $payload, $shared_secret);
+    // Encrypt payload with AES-256-CBC
+    $iv = openssl_random_pseudo_bytes(16);
+    $ciphertext = openssl_encrypt($payload, 'aes-256-cbc', $shared_secret, 0, $iv);
+    $encrypted = base64_encode($ciphertext . '::' . $iv);
 
- $url = $moodle_login_url . '?data=' . urlencode($encrypted) . '&sig=' . $sig;
- header("Location: $url");
- exit;
+    // Generate HMAC signature from payload
+    $sig = hash_hmac('sha256', $payload, $shared_secret);
+
+    // Set up redirect URL
+    $url = $moodle_login_url . '?data=' . urlencode($encrypted) . '&sig=' . $sig;
+
+    // Redirect to Moodle
+    return $url;    
 }
 
-require_once 'config.php'; // define MOODLE_SSO
-$username = $_SESSION['username'];
-$moodle_url = 'https://localhost/moodle/local/ssologin/login.php';
-$shared_secret = MOODLE_SSO;
-
-redirect_to_moodle_sso($username, $shared_secret, $moodle_url);
+require_once 'config.php'; // Define configuration
+<?php
+$moodle_url = 'https://localhost.com/local/ssologin/login.php';
+$shared_secret = 'SECRET_KEY'; // Secret Key
+$username = 'USERNAME';
+$sso_url = redirect_to_moodle_sso($username, $shared_secret, $moodle_url);
+?>
+<a href="#" onclick="window.open('<?php echo $sso_url; ?>', '_blank')">
 ```
 
 ### 🔹 Python
@@ -92,7 +105,7 @@ encrypted = base64.b64encode(cipher.encrypt(payload) + b'::' + iv).decode()
 
 sig = hmac.new(secret, payload[:-padding], hashlib.sha256).hexdigest()
 
-url = 'https://yourdomain.com/local/ssologin/login.php?data={}&sig={}'.format(
+url = 'https://localhost.com/local/ssologin/login.php?data={}&sig={}'.format(
  urllib.parse.quote(encrypted), sig
 )
 
