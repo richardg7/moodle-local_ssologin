@@ -27,4 +27,4 @@ $plugin->component = 'local_ssologin';
 $plugin->version   = 2025042000;
 $plugin->requires  = 2024040800; // Moodle 5.x.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.0';
+$plugin->release   = 'v1.1';
