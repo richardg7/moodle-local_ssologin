@@ -42,6 +42,6 @@ class provider implements null_provider {
      * @return string The reason string.
      */
     public static function get_reason(): string {
-        return get_string('privacy:metadata', 'local_ssologin');
+        return 'privacy:metadata';
     }
 }
