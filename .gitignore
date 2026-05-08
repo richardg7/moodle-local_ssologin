@@ -32,3 +32,4 @@
 *.swp 
 *~.nib 
 *.tmp
+.DS_Store

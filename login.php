@@ -26,9 +26,6 @@ require('../../config.php');
 require_once($CFG->libdir . '/authlib.php');
 require_once(__DIR__.'/locallib.php');
 
-// Ensure the user is logged in or has appropriate permissions.
-require_login();
-
 $secret = get_config('local_ssologin', 'secretkey');
 $tokenexpire = get_config('local_ssologin', 'tokenexpire');
 
@@ -51,6 +48,11 @@ $username = $payload['username'];
 if ($user = $DB->get_record('user', ['username' => $username, 'deleted' => 0])) {
     complete_user_login($user);
     local_ssologin_log_attempt('success', $user->id, $username);
+
+    if ($redirectQuery = optional_param('redirect', null, PARAM_URL)) {
+        redirect($redirectQuery);
+    }
+
     redirect(new moodle_url('/'));
 } else {
     local_ssologin_log_attempt('fail', 0, $username);
