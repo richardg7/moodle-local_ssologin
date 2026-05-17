@@ -41,4 +41,25 @@ $settings->add(new admin_setting_configtext(
     PARAM_INT
 ));
 
+$settings->add(new admin_setting_configcheckbox(
+    'local_ssologin/legacymode',
+    get_string('legacymode', 'local_ssologin'),
+    get_string('legacymode_desc', 'local_ssologin'),
+    0
+));
+
+$settings->add(new admin_setting_configcheckbox(
+    'local_ssologin/jitprovisioning',
+    get_string('jitprovisioning', 'local_ssologin'),
+    get_string('jitprovisioning_desc', 'local_ssologin'),
+    0
+));
+
+$settings->add(new admin_setting_configcheckbox(
+    'local_ssologin/profilesync',
+    get_string('profilesync', 'local_ssologin'),
+    get_string('profilesync_desc', 'local_ssologin'),
+    0
+));
+
 $ADMIN->add('localplugins', $settings);

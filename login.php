@@ -22,35 +22,91 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:disable moodle.Files.RequireLogin.Missing
 require('../../config.php');
 require_once($CFG->libdir . '/authlib.php');
-require_once(__DIR__.'/locallib.php');
+require_once(__DIR__ . '/locallib.php');
 
 $secret = get_config('local_ssologin', 'secretkey');
 $tokenexpire = get_config('local_ssologin', 'tokenexpire');
 
 $encdata = required_param('data', PARAM_RAW);
-$signature = required_param('sig', PARAM_ALPHANUMEXT);
+$signature = optional_param('sig', '', PARAM_ALPHANUMEXT);
+$legacymode = get_config('local_ssologin', 'legacymode');
 
+// 1. Verificar HMAC (Previne Padding Oracle).
+// No modo legado, permitimos que a assinatura seja omitida se necessário.
+if (!empty($signature)) {
+    if (!local_ssologin_verify_token($encdata, $signature, $secret)) {
+        throw new moodle_exception('invalidtoken', 'local_ssologin');
+    }
+} else if (!$legacymode) {
+    // Se não estiver em modo legado, a assinatura é obrigatória.
+    throw new moodle_exception('invalidtoken', 'local_ssologin');
+} else {
+    // Logar que o modo legado foi usado para que o admin saiba quais integrações atualizar.
+    debugging('SSO Login: Legacy mode used for a request without HMAC signature.', DEBUG_DEVELOPER);
+}
+
+// 2. Descriptografar o payload.
 $data = local_ssologin_decrypt($encdata, $secret);
-$payload = json_decode($data, true);
-
-if (!local_ssologin_verify_token($data, $signature, $secret)) {
+if ($data === false) {
     throw new moodle_exception('invalidtoken', 'local_ssologin');
 }
 
-if (time() - $payload['timestamp'] > $tokenexpire) {
+// 3. Decodificar JSON e validar estrutura básica.
+$payload = json_decode($data, true);
+if (json_last_error() !== JSON_ERROR_NONE || !isset($payload['username'], $payload['timestamp'])) {
     throw new moodle_exception('invalidtoken', 'local_ssologin');
+}
+
+// 4. Tratamento de Clock Skew (tolerância de expiração bidirecional).
+$skew = abs(time() - (int)$payload['timestamp']);
+if ($skew > $tokenexpire) {
+    throw new moodle_exception('invalidtoken', 'local_ssologin');
+}
+
+// 5. Proteção contra Replay Attack (Nonce).
+if (isset($payload['nonce'])) {
+    if (local_ssologin_is_nonce_used($payload['nonce'])) {
+        throw new moodle_exception('invalidtoken', 'local_ssologin');
+    }
+    local_ssologin_save_nonce($payload['nonce']);
 }
 
 $username = $payload['username'];
+$jitprovisioning = get_config('local_ssologin', 'jitprovisioning');
+$profilesync     = get_config('local_ssologin', 'profilesync');
 
-if ($user = $DB->get_record('user', ['username' => $username, 'deleted' => 0])) {
+$user = $DB->get_record('user', ['username' => $username, 'deleted' => 0]);
+
+// 6. JIT Provisioning — cria o utilizador automaticamente se não existir.
+if (!$user && $jitprovisioning) {
+    $user = local_ssologin_provision_user($payload);
+    if (!$user) {
+        local_ssologin_log_attempt('fail', 0, $username);
+        throw new moodle_exception('loginfailure', 'local_ssologin', '', $username);
+    }
+}
+
+if ($user) {
+    // 7. Profile Sync — actualiza o perfil com dados mais recentes do payload.
+    if ($profilesync) {
+        local_ssologin_sync_profile($user, $payload);
+    }
+
     complete_user_login($user);
     local_ssologin_log_attempt('success', $user->id, $username);
 
-    if ($redirectQuery = optional_param('redirect', null, PARAM_URL)) {
-        redirect($redirectQuery);
+    // 8. Redirecionamento Seguro (Apenas links internos).
+    if ($redirectquery = optional_param('redirect', null, PARAM_URL)) {
+        $moodleurl = new moodle_url('/');
+        $targeturl = new moodle_url($redirectquery);
+
+        // Compara o host do redirect com o host do Moodle.
+        if ($targeturl->get_host() === $moodleurl->get_host() || empty($targeturl->get_host())) {
+            redirect($targeturl);
+        }
     }
 
     redirect(new moodle_url('/'));

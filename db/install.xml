@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/ssologin/db" VERSION="20250509" COMMENT="XMLDB file for local_ssologin"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_ssologin_nonces" COMMENT="Stores used nonces to prevent replay attacks">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="nonce" TYPE="char" LENGTH="64" NOTNULL="true" COMMENT="Unique nonce string"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Timestamp when nonce was used"/>
+      </FIELDS>
+      <KEYS>
+        <PRIMARY NAME="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="nonce_idx" UNIQUE="true" FIELDS="nonce"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

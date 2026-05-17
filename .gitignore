@@ -33,3 +33,7 @@
 *~.nib 
 *.tmp
 .DS_Store
+
+# Documentação local
+moodle.md
+novo.md

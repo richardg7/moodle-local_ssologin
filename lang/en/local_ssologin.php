@@ -21,13 +21,22 @@
  * @copyright  2025 Richard Guedes  - Instituto de Defesa Cibernética (IDCiber)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['eventssologinattempted'] = 'SSO login attempted';
+$string['invalidtoken'] = 'Invalid or expired token.';
+$string['jitprovisioning'] = 'Enable JIT Provisioning';
+$string['jitprovisioning_desc'] = 'When enabled, new Moodle user accounts will be created automatically on first SSO login if they do not exist. The payload must include email, firstname, and lastname fields.';
+$string['legacymode'] = 'Enable Legacy Mode';
+$string['legacymode_desc'] = 'When enabled, the plugin will allow authentication requests that do not follow the new security standards (e.g., missing HMAC signatures). Use this only during transition periods.';
+$string['loginfailure'] = 'SSO login failed for user: {$a}';
+$string['loginsuccess'] = 'SSO login successful for user: {$a}';
 $string['pluginname'] = 'SSO Login';
+$string['privacy:metadata'] = 'This plugin stores nonces and timestamps to prevent replay attacks and ensure security during the authentication process.';
+$string['privacy:metadata:nonce'] = 'A unique identifier (nonce) for each login request.';
+$string['privacy:metadata:noncedesc'] = 'This table stores nonces to prevent the same login request from being used multiple times (replay attack).';
+$string['privacy:metadata:timecreated'] = 'The timestamp when the login request was processed.';
+$string['profilesync'] = 'Enable Profile Sync';
+$string['profilesync_desc'] = 'When enabled, the Moodle user profile (name, email, institution, etc.) will be updated on every SSO login with the most recent data from the payload.';
 $string['secretkey'] = 'Shared Secret Key';
 $string['secretkey_desc'] = 'The shared HMAC key used to sign/verify the SSO request.';
 $string['tokenexpire'] = 'Token Expiry Time (seconds)';
 $string['tokenexpire_desc'] = 'Maximum age of token before it is considered expired.';
-$string['invalidtoken'] = 'Invalid or expired token.';
-$string['loginsuccess'] = 'SSO login successful for user: {$a}';
-$string['loginfailure'] = 'SSO login failed for user: {$a}';
-$string['eventssologinattempted'] = 'SSO login attempted';
-$string['privacy:metadata'] = 'This plugin does not store any personal data.';

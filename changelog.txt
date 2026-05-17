@@ -8,6 +8,57 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
+## [v1.2] – 2026-05-17
+
+### 🚀 Promoted to Stable
+- 🏅 Maturity promoted from `MATURITY_ALPHA` to `MATURITY_STABLE`
+- 🏷️ Release renamed from `v2.0-dev` to `v1.2`
+- 🗓️ Version number corrected in `version.php` comment: `Year(2026)Month(05)Day(09) + 00`
+
+### 📚 Documentation
+- `moodle.md` completamente reescrito com base no código real do plugin:
+  - Diagrama completo do fluxo de autenticação (9 etapas)
+  - Tabela de todas as configurações do admin
+  - Documentação de todas as funções da `locallib.php`
+  - Schema da tabela `local_ssologin_nonces`
+  - Referência do evento `sso_login_attempted`
+  - Detalhes da Privacy API (GDPR)
+  - Tabela de mecanismos de segurança implementados
+- Exemplos de integração para **PHP**, **Python** e **Java** completamente corrigidos e funcionais:
+  - Corrigida a derivação da chave AES-256 via `SHA-256` (estava usando a secret bruta)
+  - Corrigido o alvo do HMAC: agora assina o `encdata` já cifrado em Base64 (não o JSON cru)
+  - Corrigido o formato do separador `::` no Python
+  - Java: implementação completa (antes era apenas um placeholder comentado)
+
+---
+
+## [v2.0.0-dev] – 2026-05-09
+
+### 🔒 Security & Architecture
+- ✅ **Authenticate-then-Decrypt flow**: HMAC-SHA256 signature is now verified *before* any decryption attempt, preventing Padding Oracle attacks
+- 🔁 **Nonce-based Replay Protection**: Each request may include a nonce; once consumed, subsequent use of the same nonce is rejected
+- 🔐 **Clock-skew tolerance**: Bidirectional timestamp validation with configurable expiry window
+- 🔗 **Secure Redirect**: After login, the `redirect` parameter is validated — only internal Moodle URLs (same host) are accepted; external hosts are silently ignored and redirected to `/`
+
+### ⚙️ New Admin Settings
+- 🏛️ **Legacy Mode** (`legacymode`): Toggle that allows requests missing an HMAC signature to still be processed — intended solely for transition periods while integrations are updated. Requests using this path are flagged via `debugging()` to alert administrators
+- 👤 **JIT Provisioning** (`jitprovisioning`): Automatically creates a Moodle user account on first SSO login when the user does not yet exist. Requires `email`, `firstname`, and `lastname` in the payload
+- 🔄 **Profile Sync** (`profilesync`): On every SSO login, overwrites Moodle user profile fields (`email`, `firstname`, `lastname`, `lang`, `country`, `city`, `institution`, `department`) with values from the payload
+
+### 📦 New Classes & Database
+- 📡 **Event API** (`classes/event/sso_login_attempted.php`): Moodle event class registered for every SSO login attempt (success or failure), visible in Moodle's native log reports
+- 🗄️ **Database schema** (`db/install.xml`): New table `local_ssologin_nonces` with unique index on `nonce` column to ensure replay-attack protection at the database level
+
+### 🛡️ Privacy (GDPR)
+- 📜 **Privacy API** (`classes/privacy/provider.php`): Full implementation of `core_privacy\local\metadata\provider` and `core_privacy\local\request\plugin\provider`, declaring nonce storage and its purpose
+
+### 📦 Code Quality
+- All new functions documented with PHPDoc blocks
+- Moodle Coding Standards applied throughout (`core_text`, `user_create_user`, `user_update_user`)
+- Version bumped to `2026050900`
+
+---
+
 ## [1.0.0] – 2025-04-20
 
 ### 🚀 Initial release
@@ -21,10 +72,6 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 - 🧾 Authentication log generation (success/failure)
 - ⚙️ Configuration screen in the Moodle admin panel
 - 📚 Examples of external integration in PHP, Python and Java
-
----
-
-## [Next version] – in development
 
 ---
 

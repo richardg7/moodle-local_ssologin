@@ -24,7 +24,6 @@
 
 namespace local_ssologin\event;
 
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event triggered for SSO login attempts.
@@ -32,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * @package    local_ssologin
  */
 class sso_login_attempted extends \core\event\base {
-
     /**
      * Initialize event data.
      *

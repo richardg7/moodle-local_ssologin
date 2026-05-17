@@ -24,24 +24,65 @@
 
 namespace local_ssologin\privacy;
 
-defined('MOODLE_INTERNAL') || die();
 
-use core_privacy\local\metadata\null_provider;
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\contextlist;
 
 /**
  * Privacy provider for local_ssologin.
  *
- * This plugin does not store any personal user data.
- *
  * @package    local_ssologin
  */
-class provider implements null_provider {
+class provider implements \core_privacy\local\metadata\provider, \core_privacy\local\request\plugin\provider {
     /**
-     * Returns the reason why this plugin does not store any data.
+     * Returns metadata about the data stored by this plugin.
      *
-     * @return string The reason string.
+     * @param collection $collection The collection to add metadata to.
+     * @return collection The collection with metadata.
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_database_table('local_ssologin_nonces', [
+            'nonce' => 'privacy:metadata:nonce',
+            'timecreated' => 'privacy:metadata:timecreated',
+        ], 'privacy:metadata:noncedesc');
+
+        return $collection;
+    }
+
+    /**
+     * Get the list of contexts where data is stored for this user.
+     *
+     * @param int $userid The user ID to get contexts for.
+     * @return contextlist The list of contexts.
+     */
+    public static function get_contexts_for_userid(int $userid): contextlist {
+        return new contextlist();
+    }
+
+    /**
+     * Export all user data for the specified contexts.
+     *
+     * @param \core_privacy\local\request\approved_contextlist $contextlist The list of contexts.
+     */
+    public static function export_user_data(\core_privacy\local\request\approved_contextlist $contextlist) {
+        // This plugin only stores nonces which are not linked to a specific user.
+    }
+
+    /**
+     * Delete all user data for the specified context.
+     *
+     * @param \core_privacy\local\request\context $context The context to delete data for.
+     */
+    public static function delete_data_for_all_users_in_context(\core_privacy\local\request\context $context) {
+        // This plugin only stores nonces which are not linked to a specific user.
+    }
+
+    /**
+     * Delete all user data for the specified approved contextlist.
+     *
+     * @param \core_privacy\local\request\approved_contextlist $contextlist The list of contexts.
+     */
+    public static function delete_data_for_user(\core_privacy\local\request\approved_contextlist $contextlist) {
+        // This plugin only stores nonces which are not linked to a specific user.
     }
 }
