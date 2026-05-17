@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_ssologin';
-$plugin->version   = 2026050900; // Year 2026 Month 05 Day 09 plus 00.
+$plugin->version   = 2026051700; // Year 2026 Month 05 Day 17 plus 00.
 $plugin->requires  = 2025040700; // Moodle 5.0+.
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = 'v1.2';
+$plugin->release   = 'v1.3';

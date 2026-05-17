@@ -8,6 +8,14 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
+## [v1.3] – 2026-05-17
+
+### 🐛 Bug Fixes
+- 🗄️ Corrigido o schema do banco de dados no `db/install.xml` que impedia a instalação do plugin no Moodle. A tag inválida `<PRIMARY>` foi substituída pela tag correta `<KEY TYPE="primary">` exigida pelo Moodle XMLDB.
+- 🗓️ Version number updated to `2026051700` to allow correct Moodle upgrade path.
+
+---
+
 ## [v1.2] – 2026-05-17
 
 ### 🚀 Promoted to Stable

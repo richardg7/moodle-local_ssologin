@@ -2,7 +2,7 @@
 
 A local Moodle plugin that enables **Single Sign-On (SSO)** authentication from an external system, using **AES-256-CBC** encryption and **HMAC-SHA256** signatures to ensure data security and integrity.
 
-> **Version:** `v1.2` · **Moodle version code:** `2026050900` · **Maturity:** `MATURITY_STABLE`
+> **Version:** `v1.3` · **Moodle version code:** `2026051700` · **Maturity:** `MATURITY_STABLE`
 > **Requires:** Moodle 4.3+ · **License:** GNU GPL v3
 > **Developer:** [Richard Guedes](https://www.linkedin.com/in/richard-guedes/) — President of the Cyber Defense Institute ([IDCiber](https://idciber.org))
 
@@ -436,6 +436,7 @@ php admin/cli/cron.php
 | `v1.0.0` | 2025-04-20 | Initial release: SSO with HMAC + AES-256-CBC |
 | `v1.1.0-dev` | 2026-05-09 | Authenticate-then-Decrypt, Nonces, JIT, Profile Sync, Legacy Mode, GDPR |
 | `v1.2` | 2026-05-17 | Promoted to `MATURITY_STABLE`, version `2026050900` |
+| `v1.3` | 2026-05-17 | Fixed XMLDB schema error (`<PRIMARY>` to `<KEY>`) |
 
 > 📄 See full history in [changelog.txt](./changelog.txt)
 
