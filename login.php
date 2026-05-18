@@ -80,12 +80,12 @@ $profilesync     = get_config('local_ssologin', 'profilesync');
 
 $user = $DB->get_record('user', ['username' => $username, 'deleted' => 0]);
 
-// Account Linking: Se não encontrou pelo username, tenta encontrar pelo e-mail (Fallback)
+// Account Linking: Se não encontrou pelo username, tenta encontrar pelo e-mail (Fallback).
 if (!$user && !empty($payload['email'])) {
     $email = trim($payload['email']);
     $user = $DB->get_record('user', ['email' => $email, 'deleted' => 0], '*', IGNORE_MULTIPLE);
-    
-    // Se encontrou, atualiza o username no banco para ficar sincronizado com o sistema de membros
+
+    // Se encontrou, atualiza o username no banco para ficar sincronizado com o sistema de membros.
     if ($user) {
         try {
             $DB->set_field('user', 'username', $username, ['id' => $user->id]);
