@@ -8,6 +8,13 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
+## [v1.4] – 2026-05-18
+
+### ✨ New Features
+- 🔗 **Account Linking (Email Fallback):** Implementada vinculação de contas por e-mail. Se o usuário não for encontrado pelo `username` enviado no SSO, o plugin buscará a conta Moodle correspondente pelo `email` (prevenindo a criação acidental de contas duplicadas) e sincronizará automaticamente o `username` para acessos futuros.
+
+---
+
 ## [v1.3] – 2026-05-17
 
 ### 🐛 Bug Fixes
@@ -24,7 +31,7 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 - 🗓️ Version number corrected in `version.php` comment: `Year(2026)Month(05)Day(09) + 00`
 
 ### 📚 Documentation
-- `moodle.md` completamente reescrito com base no código real do plugin:
+- `Com base no código real do plugin:
   - Diagrama completo do fluxo de autenticação (9 etapas)
   - Tabela de todas as configurações do admin
   - Documentação de todas as funções da `locallib.php`

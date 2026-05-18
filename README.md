@@ -2,7 +2,7 @@
 
 A local Moodle plugin that enables **Single Sign-On (SSO)** authentication from an external system, using **AES-256-CBC** encryption and **HMAC-SHA256** signatures to ensure data security and integrity.
 
-> **Version:** `v1.3` · **Moodle version code:** `2026051700` · **Maturity:** `MATURITY_STABLE`
+> **Version:** `v1.4` · **Moodle version code:** `2026051800` · **Maturity:** `MATURITY_STABLE`
 > **Requires:** Moodle 4.3+ · **License:** GNU GPL v3
 > **Developer:** [Richard Guedes](https://www.linkedin.com/in/richard-guedes/) — President of the Cyber Defense Institute ([IDCiber](https://idciber.org))
 
@@ -56,10 +56,11 @@ External System                          Moodle (local_ssologin)
                                          7. Decrypt payload
                                          8. Validate timestamp (clock-skew)
                                          9. Check nonce (replay protection)
-                                        10. JIT provision user (if enabled)
-                                        11. Sync profile (if enabled)
-                                        12. complete_user_login()
-                                        13. Secure redirect ◄── user lands in Moodle
+                                        10. Account Linking (Fallback to email)
+                                        11. JIT provision user (if enabled)
+                                        12. Sync profile (if enabled)
+                                        13. complete_user_login()
+                                        14. Secure redirect ◄── user lands in Moodle
 ```
 
 > [!IMPORTANT]
@@ -437,6 +438,7 @@ php admin/cli/cron.php
 | `v1.1.0-dev` | 2026-05-09 | Authenticate-then-Decrypt, Nonces, JIT, Profile Sync, Legacy Mode, GDPR |
 | `v1.2` | 2026-05-17 | Promoted to `MATURITY_STABLE`, version `2026050900` |
 | `v1.3` | 2026-05-17 | Fixed XMLDB schema error (`<PRIMARY>` to `<KEY>`) |
+| `v1.4` | 2026-05-18 | Added Account Linking (Email Fallback) to prevent duplicate accounts |
 
 > 📄 See full history in [changelog.txt](./changelog.txt)
 

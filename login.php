@@ -80,6 +80,23 @@ $profilesync     = get_config('local_ssologin', 'profilesync');
 
 $user = $DB->get_record('user', ['username' => $username, 'deleted' => 0]);
 
+// Account Linking: Se não encontrou pelo username, tenta encontrar pelo e-mail (Fallback)
+if (!$user && !empty($payload['email'])) {
+    $email = trim($payload['email']);
+    $user = $DB->get_record('user', ['email' => $email, 'deleted' => 0], '*', IGNORE_MULTIPLE);
+    
+    // Se encontrou, atualiza o username no banco para ficar sincronizado com o sistema de membros
+    if ($user) {
+        try {
+            $DB->set_field('user', 'username', $username, ['id' => $user->id]);
+            $user->username = $username;
+        } catch (\Exception $e) {
+            // Em caso de colisão de username (raro), ignora o update e apenas prossegue com o login.
+            debugging('SSO Login Account Linking: Failed to sync username — ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+    }
+}
+
 // 6. JIT Provisioning — cria o utilizador automaticamente se não existir.
 if (!$user && $jitprovisioning) {
     $user = local_ssologin_provision_user($payload);
