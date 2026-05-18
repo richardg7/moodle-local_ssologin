@@ -8,6 +8,13 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
+## [v1.5] – 2026-05-18
+
+### 📚 Documentation
+- 📝 **fix: improve code readability by adding missing periods to login comments.
+
+---
+
 ## [v1.4] – 2026-05-18
 
 ### ✨ New Features
