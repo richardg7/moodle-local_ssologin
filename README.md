@@ -2,7 +2,7 @@
 
 A local Moodle plugin that enables **Single Sign-On (SSO)** authentication from an external system, using **AES-256-CBC** encryption and **HMAC-SHA256** signatures to ensure data security and integrity.
 
-> **Version:** `v1.5` · **Moodle version code:** `2026051801` · **Maturity:** `MATURITY_STABLE`
+> **Version:** `v1.6` · **Moodle version code:** `2026051802` · **Maturity:** `MATURITY_STABLE`
 > **Requires:** Moodle 5+ · **License:** GNU GPL v3
 > **Developer:** [Richard Guedes](https://www.linkedin.com/in/richard-guedes/) — President of the Cyber Defense Institute ([IDCiber](https://idciber.org))
 
@@ -440,6 +440,7 @@ php admin/cli/cron.php
 | `v1.3` | 2026-05-17 | Fixed XMLDB schema error (`<PRIMARY>` to `<KEY>`) |
 | `v1.4` | 2026-05-18 | Added Account Linking (Email Fallback) to prevent duplicate accounts |
 | `v1.5` | 2026-05-18 | Added Moodle HQ Plugin Directory description |
+| `v1.6` | 2026-05-18 | Synchronized VERSION attribute in db/install.xml with version.php |
 
 > 📄 See full history in [changelog.txt](./changelog.txt)
 

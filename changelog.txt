@@ -8,6 +8,13 @@ This project follows [Semantic Versioning](https://semver.org/lang/en-US/).
 
 ---
 
+## [v1.6] – 2026-05-18
+
+### 🐛 Bug Fixes
+- 🗄️ Synchronized `VERSION` attribute in `db/install.xml` with `version.php`.
+
+---
+
 ## [v1.5] – 2026-05-18
 
 ### 📚 Documentation
